@@ -12,5 +12,16 @@
   		<artifactId>taotao-manage-pojo</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
+  	<!-- 分页助手 -->
+	<dependency>
+		<groupId>com.github.pagehelper</groupId>
+		<artifactId>pagehelper</artifactId>
+		<version>${pagehelper.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>com.github.jsqlparser</groupId>
+		<artifactId>jsqlparser</artifactId>
+		<version>${jsqlparser.version}</version>
+	</dependency>
   </dependencies>
 </project>

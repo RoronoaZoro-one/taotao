@@ -23,5 +23,6 @@
 
 	<!-- 声明需要暴露的服务接口 -->
 	<dubbo:service interface="top.hxq.taotao.manage.service.test.TestService" ref="testServiceImpl" />
+	<dubbo:service interface="top.hxq.taotao.manage.service.itemCat.ItemCatService" ref="itemCatServiceImpl" />
 	
 </beans>

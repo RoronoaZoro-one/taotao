@@ -28,7 +28,12 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>top.hxq.taotao</groupId>
+			<artifactId>taotao-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+  </dependencies>
 
 	<build>
 		<plugins>

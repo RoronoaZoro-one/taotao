@@ -20,6 +20,14 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
+	<!-- 配置文件上传解析器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 文件上传大小 -->
+		<property name="maxUploadSize" value="5000000"></property>
+		<!-- 默认字符集 -->
+		<property name="defaultEncoding" value="utf-8"></property>
+	</bean>
+	
 	<!-- 配置dubbo服务 -->
 	<dubbo:application name="taotao-manage-web" />
 
@@ -28,5 +36,7 @@
 
 	<!-- 声明要调用的服务，timeout是设置连接超时最长时间,如果不设置，超时时间默认是3秒 -->
 	<dubbo:reference interface="top.hxq.taotao.manage.service.test.TestService" id="testService"/>
-	<dubbo:reference interface="top.hxq.taotao.manage.service.itemCat.ItemCatService" id="itemCatService"/>
+	<dubbo:reference interface="top.hxq.taotao.manage.service.item.ItemCatService" id="itemCatService"/>
+	<dubbo:reference interface="top.hxq.taotao.manage.service.item.ItemService" id="itemService"/>
+	<dubbo:reference interface="top.hxq.taotao.manage.service.item.ItemDescService" id="itemDescService"/>
 </beans>

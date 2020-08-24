@@ -39,4 +39,6 @@
 	<dubbo:reference interface="top.hxq.taotao.manage.service.item.ItemCatService" id="itemCatService"/>
 	<dubbo:reference interface="top.hxq.taotao.manage.service.item.ItemService" id="itemService"/>
 	<dubbo:reference interface="top.hxq.taotao.manage.service.item.ItemDescService" id="itemDescService"/>
+	<dubbo:reference interface="top.hxq.taotao.manage.service.content.ContentService" id="contentService" />
+	<dubbo:reference interface="top.hxq.taotao.manage.service.content.ContentCategoryService" id="contentCategoryService" />
 </beans>

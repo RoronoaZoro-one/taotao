@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+        
+   	<context:property-placeholder location="classpath:solr.properties"/>     
+        
+	<bean class="org.apache.solr.client.solrj.impl.CloudSolrServer">
+		<!-- 设置zookeeper集群信息 -->
+		<constructor-arg name="zkHost" value="${zookeeperHost}"></constructor-arg>
+		<!-- 设置默认的collection -->
+		<property name="defaultCollection" value="${defaultCollection}"></property>
+	</bean>
+	
+</beans>

@@ -36,6 +36,7 @@
 	<servlet-mapping>
 		<servlet-name>taotao-portal</servlet-name>
 		<url-pattern>*.html</url-pattern>
+		<url-pattern>/service/*</url-pattern>
 	</servlet-mapping>
 
 </web-app>

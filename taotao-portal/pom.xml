@@ -78,6 +78,11 @@
 			<artifactId>taotao-manage-pojo</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>top.hxq.taotao</groupId>
+			<artifactId>taotao-sso-interface</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>

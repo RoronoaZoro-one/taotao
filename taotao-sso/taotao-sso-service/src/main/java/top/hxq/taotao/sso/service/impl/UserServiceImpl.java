@@ -1,8 +1,16 @@
 package top.hxq.taotao.sso.service.impl;
 
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import top.hxq.taotao.common.service.redis.RedisService;
 import top.hxq.taotao.sso.mapper.UserMapper;
@@ -23,6 +31,8 @@ public class UserServiceImpl implements UserService {
 	
 	//ticket在redis中的存活时间
 	private static final int REDIS_TICKET_EXPIRE_TIME = 60*60;
+	
+	private static final ObjectMapper MAPPER = new ObjectMapper();
 
 	@Autowired
 	private UserMapper userMapper;
@@ -61,6 +71,39 @@ public class UserServiceImpl implements UserService {
 			return userJsonStr;
 		}
 		return "";
+	}
+
+
+	@Override
+	public void register(User user) {
+		user.setPassword(DigestUtils.md5Hex(user.getPassword()));
+		user.setCreated(new Date());
+		user.setUpdated(user.getCreated());
+		userMapper.insertSelective(user);
+	}
+
+
+	
+	@Override
+	public String login(User user) throws Exception {
+		//1.根据用户账号和密码查询用户
+		user.setPassword(DigestUtils.md5Hex(user.getPassword()));
+		List<User> userList = userMapper.select(user);
+		String ticket = "";
+		//2.将用户转换成json字符串存放到redis,并返回ticket
+		if(userList != null && userList.size() > 0) {
+			ticket = DigestUtils.md5Hex(UUID.randomUUID().toString() + System.currentTimeMillis());
+			User tmp = userList.get(0);
+			redisService.setex(REDIS_TICKET_PREFIX + ticket, REDIS_TICKET_EXPIRE_TIME, MAPPER.writeValueAsString(tmp));
+		}
+		return ticket;
+	}
+
+
+	@Override
+	public void logout(String ticket) {
+		//删除redis中对应的用户信息
+		redisService.del(REDIS_TICKET_PREFIX + ticket);
 	}
 	
 	

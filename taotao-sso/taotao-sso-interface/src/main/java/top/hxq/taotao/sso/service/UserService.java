@@ -1,5 +1,7 @@
 package top.hxq.taotao.sso.service;
 
+import top.hxq.taotao.sso.pojo.User;
+
 public interface UserService {
 
 	
@@ -18,5 +20,28 @@ public interface UserService {
 	 * @return
 	 */
 	String queryUserStrByTicket(String ticket);
+
+
+	/**
+	 * 注册
+	 * @param user
+	 */
+	void register(User user);
+
+
+	/**
+	 * 登录
+	 * @param user
+	 * @return
+	 * @throws Exception 
+	 */
+	String login(User user) throws Exception;
+
+
+	/**
+	 * 退出登录，删除redis中的ticket
+	 * @param ticket
+	 */
+	void logout(String ticket);
 
 }

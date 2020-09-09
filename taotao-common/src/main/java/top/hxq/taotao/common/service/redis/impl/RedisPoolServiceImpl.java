@@ -1,5 +1,7 @@
 package top.hxq.taotao.common.service.redis.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import redis.clients.jedis.Jedis;
@@ -72,6 +74,50 @@ public class RedisPoolServiceImpl implements RedisService {
 		try {
 			jedis = jedisPool.getResource();
 			return jedis.incr(key);
+		} finally {
+			jedis.close();
+		}
+	}
+
+	@Override
+	public Long hset(String key, String field, String value) {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			return jedis.hset(key,field,value);
+		} finally {
+			jedis.close();
+		}
+	}
+
+	@Override
+	public String hget(String key, String field) {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			return jedis.hget(key,field);
+		} finally {
+			jedis.close();
+		}
+	}
+
+	@Override
+	public List<String> hvals(String key) {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			return jedis.hvals(key);
+		} finally {
+			jedis.close();
+		}
+	}
+
+	@Override
+	public Long hdel(String key, String field) {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			return jedis.hdel(key,field);
 		} finally {
 			jedis.close();
 		}

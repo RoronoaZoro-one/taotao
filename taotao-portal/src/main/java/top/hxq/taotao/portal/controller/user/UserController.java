@@ -27,7 +27,7 @@ import top.hxq.taotao.sso.service.UserService;
 public class UserController {
 
 	//ticket存放在cookie中的key
-	private static final String COOKIE_TICKET_NAME = "TT_TICKET";
+	public static final String COOKIE_TICKET_NAME = "TT_TICKET";
 	
 	//ticket存放在cookie中的存活时间
 	private static final int COOKIE_TICKET_MAX_AGE = 60 * 60;

@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- 配置controller扫描 -->
-	<context:component-scan base-package="top.hxq.taotao.portal.controller" />
+	<context:component-scan base-package="top.hxq.taotao.portal" />
 
 	<!-- 配置注解驱动 -->
 	<mvc:annotation-driven />
@@ -19,6 +19,14 @@
 		<property name="prefix" value="/WEB-INF/views/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
+	
+	<!-- 配置订单页面拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/order/**"/>
+			<bean class="top.hxq.taotao.portal.interceptor.OrderHandlerInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
 	
 	
 	<!-- 配置dubbo服务 -->
@@ -34,4 +42,5 @@
 	<dubbo:reference interface="top.hxq.taotao.manage.service.content.ContentService" id="contentService" />
 	<dubbo:reference interface="top.hxq.taotao.manage.service.content.ContentCategoryService" id="contentCategoryService" />
 	<dubbo:reference interface="top.hxq.taotao.sso.service.UserService" id="userService" />
+	<dubbo:reference interface="top.hxq.taotao.cart.service.CartService" id="cartService" />
 </beans>

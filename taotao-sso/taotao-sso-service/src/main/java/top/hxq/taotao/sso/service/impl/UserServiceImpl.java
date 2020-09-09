@@ -1,5 +1,6 @@
 package top.hxq.taotao.sso.service.impl;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -9,7 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import top.hxq.taotao.common.service.redis.RedisService;
@@ -107,5 +110,16 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	
+	@Override
+	public User queryUserByTicket(String ticket) throws Exception {
+		String key = REDIS_TICKET_PREFIX + ticket;
+		String userJsonStr = redisService.get(key);
+		if(StringUtils.isNotBlank(userJsonStr)) {
+			//重置ticket在redis中的存活时间
+			redisService.expire(key, REDIS_TICKET_EXPIRE_TIME);
+			return MAPPER.readValue(userJsonStr, User.class);
+		}
+		return null;
+	}
 	
 }

@@ -44,4 +44,13 @@ public interface UserService {
 	 */
 	void logout(String ticket);
 
+
+	/**
+	 * 根据ticket查询用户
+	 * @param ticket 用户登录凭证
+	 * @return
+	 * @throws Exception 
+	 */
+	User queryUserByTicket(String ticket) throws Exception;
+
 }

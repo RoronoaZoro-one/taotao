@@ -51,7 +51,7 @@ public class ItemController {
 		try {
 			Long itemId = itemService.saveItem(item, desc);
 			// 发布mq消息
-			sendMqMsg(itemId);
+			sendMqMsg(itemId,"insert");
 			return ResponseEntity.ok(null);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,7 +71,7 @@ public class ItemController {
 		try {
 			itemService.updateItem(item, desc);
 			// 发布mq消息
-			sendMqMsg(item.getId());
+			sendMqMsg(item.getId(),"update");
 			return ResponseEntity.ok(null);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,7 +116,7 @@ public class ItemController {
 					item.setId(itemId);
 					item.setStatus(3);
 					itemService.updateSelective(item);
-					sendMqMsg(itemId);
+					sendMqMsg(itemId,"delete");
 				}
 			}
 			return ResponseEntity.ok(null);
@@ -140,7 +140,7 @@ public class ItemController {
 					item.setId(itemId);
 					item.setStatus(2);
 					itemService.updateSelective(item);
-					sendMqMsg(itemId);
+					sendMqMsg(itemId,"instock");
 				}
 			}
 			return ResponseEntity.ok(null);
@@ -165,7 +165,7 @@ public class ItemController {
 					item.setId(itemId);
 					item.setStatus(1);
 					itemService.updateSelective(item);
-					sendMqMsg(itemId);
+					sendMqMsg(itemId,"reshelf");
 				}
 			}
 			return ResponseEntity.ok(null);
@@ -184,12 +184,13 @@ public class ItemController {
 	 * @param type
 	 *            update/insert/delete
 	 */
-	private void sendMqMsg(final Long itemId) {
+	private void sendMqMsg(final Long itemId,final String type) {
 		jmsTemplate.send(topicDestination, new MessageCreator() {
 			@Override
 			public Message createMessage(Session session) throws JMSException {
 				ActiveMQMapMessage mapMessage = new ActiveMQMapMessage();
 				mapMessage.setLong("itemId", itemId);
+				mapMessage.setString("type", type);
 				return mapMessage;
 			}
 		});

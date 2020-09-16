@@ -1,10 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="top.hxq.taotao.order.mapper.OrderMapper">
 
+	<!-- 保存订单信息到数据库 -->
+	<insert id="saveOrder">
+		INSERT INTO tb_order (order_id, payment, payment_type, post_fee, status, create_time, update_time, 
+			payment_time, consign_time, end_time, close_time, shipping_name, shipping_code, user_id, buyer_message, buyer_nick, buyer_rate) 
+		VALUES (
+			#{orderId}, #{payment}, #{paymentType}, #{postFee}, #{status}, #{createTime}, #{updateTime}, 
+			#{paymentTime}, #{consignTime}, #{endTime}, #{closeTime}, #{shippingName}, #{shippingCode}, 
+			#{userId}, #{buyerMessage}, #{buyerNick}, #{buyerRate});
+			
+		INSERT INTO tb_order_item (item_id, order_id, num, title, price, total_fee, pic_path) 
+		VALUES 
+			<foreach collection="orderItems" item="item" separator="," >
+			(#{item.itemId}, #{orderId}, #{item.num}, #{item.title}, #{item.price}, #{item.totalFee}, 
+			#{item.picPath})
+			</foreach>
+		;
+		
+		INSERT INTO tb_order_shipping (order_id, receiver_name, receiver_phone, receiver_mobile, 
+			receiver_state, receiver_city, receiver_district, receiver_address, receiver_zip, created, updated) 
+		VALUES (
+			#{orderId}, #{orderShipping.receiverName}, #{orderShipping.receiverPhone}, 
+			#{orderShipping.receiverMobile}, #{orderShipping.receiverState}, #{orderShipping.receiverCity}, 
+			#{orderShipping.receiverDistrict}, #{orderShipping.receiverAddress}, #{orderShipping.receiverZip}, 
+			now(), now());
+	</insert>
+	
+	<!-- 根据订单id查询订单物流信息 -->
+	<select id="queryOrderShippingByOrderId" resultType="OrderShipping">
+		select * from tb_order_shipping where order_id = #{orderId}
+	</select>
+	
+	<!-- 根据订单id查询订单商品信息 -->
+	<select id="queryOrderItemsByOrderId" resultType="OrderItem">
+		select * from tb_order_item where order_id = #{orderId}
+	</select>
+	
+	<resultMap type="Order" id="orderResultMap" autoMapping="true">
+		<id property="orderId" column="order_id" />
+		<!-- 一对一查询订单物流信息 -->
+		<association property="orderShipping" autoMapping="true" column="order_id" javaType="OrderShipping" select="queryOrderShippingByOrderId"></association>
+		<!-- 一对多查询订单商品信息 -->
+		<collection property="orderItems" autoMapping="true" column="order_id" javaType="list" ofType="OrderItem" select="queryOrderItemsByOrderId"></collection>
+	</resultMap>
 
 
+	<!-- 根据订单id获得订单信息 -->
+	<select id="queryOrderByOrderId" resultMap="orderResultMap">
+		select * from tb_order where order_id = #{orderId}
+	</select>
+	
+	<!-- 定时关闭指定范围内未付款的在线支付订单 -->
+	<update id="autoCloseOrder">
+		update tb_order set update_time = now(),
+		end_time = now(),
+		close_time = now(),
+		status = 6
+		where payment_type = 1
+		and status = 1
+		and create_time &lt;= #{date}
+	</update>
 </mapper>

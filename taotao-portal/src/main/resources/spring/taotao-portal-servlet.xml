@@ -43,4 +43,5 @@
 	<dubbo:reference interface="top.hxq.taotao.manage.service.content.ContentCategoryService" id="contentCategoryService" />
 	<dubbo:reference interface="top.hxq.taotao.sso.service.UserService" id="userService" />
 	<dubbo:reference interface="top.hxq.taotao.cart.service.CartService" id="cartService" />
+	<dubbo:reference interface="top.hxq.taotao.order.service.OrderService" id="orderService" />
 </beans>
